@@ -93,9 +93,10 @@
 					cm = d.getMonth();
 				}
 				var calendar = document.getElementById("calendar");
-				DOM.first(calendar).delete();
+				calendar.first().remove();
 				calendar.append(renderMonth({"year": cy, "month": cm}));
 			}
+
 		</script>
 		<style>
 		.day{

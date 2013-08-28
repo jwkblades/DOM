@@ -6,7 +6,7 @@ var DOM = {
 	"contributors": [
 		"James Blades"
 	],
-	init = function(){
+	init: function(){
 		var e = Element;
 		if(!e){
 			throw "Error - Unsupported browser";
@@ -30,9 +30,6 @@ var DOM = {
 			return this.cloneNode(true);
 		};
 		e.prototype.create = DOM.create;
-		e.prototype.delete = function(){
-			this.parent().removeChild(this);
-		};
 		e.prototype.first = function(){
 			var current = this.firstChild;
 			while(String(current.appendData).substr(0, 9) === "function"){
@@ -60,12 +57,12 @@ var DOM = {
 			return this.previousSibling;
 		};
 		e.prototype.remove = function(ele){
-			ele.delete();
+			this.parent().removeChild(this);
 		};
 		e.prototype.text = DOM.create;
 	},
 	create: function(tag){
-		return document.createElement(ele);
+		return document.createElement(tag);
 	},
 	text: function(str){
 		return document.createTextNode(str);
