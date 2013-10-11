@@ -37,6 +37,9 @@
 					holder.append(tmp);
 				}
 				holder.append(DOM.create("br"));
+				if(dow == 0){
+					dow += 7;
+				}
 				for(i = 0; i < dow; i++){
 					tmp = DOM.create("span");
 					tmp.className = "day notThisMonth calendarDate";
