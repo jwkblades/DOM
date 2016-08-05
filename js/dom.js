@@ -76,7 +76,7 @@ var DOM = {
 			e.prototype.remove = function(ele){
 				this.parent().removeChild(this);
 			};
-			e.prototype.text = DOM.create;
+			e.prototype.text = DOM.text;
 		}
 		alterProto(Element);
 		alterProto(Text);
