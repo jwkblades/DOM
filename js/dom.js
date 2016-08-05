@@ -1,6 +1,6 @@
 /*
 ###############################################################################
-# Copyright (c) 2013 James Blades <jwkblades@gmail.com>
+# Copyright (c) 2013-2016 James Blades <jwkblades@gmail.com>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -24,7 +24,7 @@
 ###############################################################################
 */
 var DOM = {
-	"version": 0.1,
+	"version": 0.2,
 	"name": "DOM",
 	"description": "A simple DOM library",
 	"author": "James Blades",
@@ -32,59 +32,54 @@ var DOM = {
 		"James Blades"
 	],
 	init: function(){
-		var e = Element;
-		if(!e){
-			throw "Error - Unsupported browser";
+		function alterProto(e){
+			if(!e){
+				throw "Error - Unsupported browser";
+			}
+			e.prototype.after = function(ele){
+				if(ele){
+					this.parent().insertBefore(ele, this.next());
+				}
+				return this.next();
+			};
+			e.prototype.append = function(ele){
+				this.appendChild(ele);
+			};
+			e.prototype.before = function(ele){
+				if(ele){
+					this.parent().insertBefore(ele, this);
+				}
+				return this.previous();
+			};
+			e.prototype.clone = function(){
+				return this.cloneNode(true);
+			};
+			e.prototype.create = DOM.create;
+			e.prototype.first = function(){
+				return this.firstChild;
+			};
+			e.prototype.last = function(){
+				return this.lastChild;
+			};
+			e.prototype.next = function(){
+				return this.nextSibling;
+			};
+			e.prototype.parent = function(){
+				return this.parentNode;
+			};
+			e.prototype.prepend = function(ele){
+				this.insertBefore(ele, this.first());
+			};
+			e.prototype.previous = function(){
+				return this.previousSibling;
+			};
+			e.prototype.remove = function(ele){
+				this.parent().removeChild(this);
+			};
+			e.prototype.text = DOM.create;
 		}
-		e.prototype.after = function(ele){
-			if(ele){
-				this.parent().insertBefore(ele, this.next());
-			}
-			return this.next();
-		};
-		e.prototype.append = function(ele){
-			this.appendChild(ele);
-		};
-		e.prototype.before = function(ele){
-			if(ele){
-				this.parent().insertBefore(ele, this);
-			}
-			return this.previous();
-		};
-		e.prototype.clone = function(){
-			return this.cloneNode(true);
-		};
-		e.prototype.create = DOM.create;
-		e.prototype.first = function(){
-			var current = this.firstChild;
-			while(String(current.appendData).substr(0, 9) === "function"){
-				current = this.previous();
-			}
-			return current;
-		};
-		e.prototype.last = function(){
-			var current = this.lastChild;
-			while(String(current.appendData).substr(0, 9) === "function"){
-				current = this.previous();
-			}
-			return current;
-		};
-		e.prototype.next = function(){
-			return this.nextSibling;
-		};
-		e.prototype.parent = function(){
-			return this.parentNode;
-		};
-		e.prototype.prepend = function(ele){
-			this.insertBefore(ele, this.first());
-		};
-		e.prototype.previous = function(){
-			return this.previousSibling;
-		};
-		e.prototype.remove = function(ele){
-			this.parent().removeChild(this);
-		};
-		e.prototype.text = DOM.create;
+		alterProto(Element);
+		alterProto(Text);
 	},
 	create: function(tag){
 		return document.createElement(tag);
@@ -93,3 +88,4 @@ var DOM = {
 		return document.createTextNode(str);
 	}
 };
+DOM.init();
